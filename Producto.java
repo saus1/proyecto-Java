@@ -1,4 +1,4 @@
-// Clase Producto
+
 public class Producto {
     private int id;
     private String nombre;
@@ -27,6 +27,7 @@ public class Producto {
 
     @Override
     public String toString() {
-        return "ID: " + id + " | Nombre: " + nombre + " | Cantidad: " + cantidad + " | Categoría: " + categoria;
+        return String.format("ID: %d | Nombre: %s | Cantidad: %d | Categoría: %s", 
+                            id, nombre, cantidad, categoria);
     }
 }
