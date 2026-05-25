@@ -1,33 +1,48 @@
 
+/**
+ * Modelo que representa un producto de la tienda.
+ * El id se asigna automáticamente — no lo ingresa el usuario.
+ *
+ * En Spring Boot con JPA este id lo va a manejar la base de datos.
+ * Por eso más adelante vamos a agregar un constructor vacío y @Entity.
+ */
 public class Producto {
+
+    // Contador compartido por todos los objetos — genera ids únicos
+    private static int contadorId = 1;
+
     private int id;
     private String nombre;
-    private int cantidad;
-    private String categoria;
+    private double precio;
+    private int stock;
 
-    public Producto(int id, String nombre, int cantidad, String categoria) {
-        this.id = id;
+    /**
+     * Constructor principal. El id se asigna automáticamente.
+     */
+    public Producto(String nombre, double precio, int stock) {
+        this.id = contadorId++;
         this.nombre = nombre;
-        this.cantidad = cantidad;
-        this.categoria = categoria;
+        this.precio = precio;
+        this.stock = stock;
     }
 
-    // Getters y Setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-
+    // Getters — necesarios para acceder a los datos desde otras clases
+    public int getId()        { return id; }
     public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    public double getPrecio() { return precio; }
+    public int getStock()     { return stock; }
 
-    public int getCantidad() { return cantidad; }
-    public void setCantidad(int cantidad) { this.cantidad = cantidad; }
+    // Setters — permiten modificar precio y stock después de la creación
+    public void setPrecio(double precio) { this.precio = precio; }
+    public void setStock(int stock)      { this.stock = stock; }
 
-    public String getCategoria() { return categoria; }
-    public void setCategoria(String categoria) { this.categoria = categoria; }
-
+    /**
+     * Se llama automáticamente cuando hacemos System.out.println(producto).
+     */
     @Override
     public String toString() {
-        return String.format("ID: %d | Nombre: %s | Cantidad: %d | Categoría: %s", 
-                            id, nombre, cantidad, categoria);
+        return "[ID: " + id + "] " + nombre +
+               " | Precio: $" + precio +
+               " | Stock: " + stock;
     }
 }
