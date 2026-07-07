@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import com.techlab.libros.model.Empleado;
 import com.techlab.libros.service.EmpleadoService;
 
 @RestController
 @RequestMapping("/empleados")
-@CrossOrigin(origins = "http://localhost:5500") // Permite solicitudes desde el puerto 5500 (donde se sirve el front-end).
+@CrossOrigin(origins = "http://localhost:5500") // Permite solicitudes desde el puerto 5500 (donde se sirve el
+                                                // front-end).
 public class EmpleadoController {
 
     private final EmpleadoService service;
@@ -48,22 +48,35 @@ public class EmpleadoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
-    // PUT /empleado/{id} — 200 OK si existe, 404 si no, 400 si datos inválidos.
     @PutMapping("/{id}")
     public ResponseEntity<Empleado> actualizar(@PathVariable int id, @RequestBody Empleado datos) {
-            Empleado existente = service.obtenerPorId(id);
-            existente.setNombre(datos.getNombre());
-            existente.setSector(datos.getSector());
-            existente.setAnio(datos.getAnio());
-            return ResponseEntity.ok(existente);
-        
+        Empleado existente = service.obtenerPorId(id);
+        existente.setNombre(datos.getNombre());
+        existente.setSector(datos.getSector());
+        existente.setAnio(datos.getAnio());
+        // Guardar cambios usando el repositorio (a través del servicio)
+        return ResponseEntity.ok(service.guardar(existente));
     }
+
+    // PUT /empleado/{id} — 200 OK si existe, 404 si no, 400 si datos inválidos.
+    /*
+     * @PutMapping("/{id}")
+     * public ResponseEntity<Empleado> actualizar(@PathVariable int id, @RequestBody
+     * Empleado datos) {
+     * Empleado existente = service.obtenerPorId(id);
+     * existente.setNombre(datos.getNombre());
+     * existente.setSector(datos.getSector());
+     * existente.setAnio(datos.getAnio());
+     * return ResponseEntity.ok(existente);
+     * 
+     * }
+     */
 
     // DELETE /empleado/{id} — 200 OK si existe, 404 si no.
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable int id) {
-            service.eliminar(id);
-            return ResponseEntity.ok().build();
+        service.eliminar(id);
+        return ResponseEntity.ok().build();
     }
 
 }

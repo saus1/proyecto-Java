@@ -1,16 +1,25 @@
 package com.techlab.libros.model;
+
+import jakarta.persistence.*;
 import lombok.*;
 
-
-
-@Data // generar getters,setters,toString,equals
-@NoArgsConstructor // genera un constructores sin argumentos
-@AllArgsConstructor // generar un constructor con todos los campos
+@Entity
+@Table(name = "empleados")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Empleado {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String nombre;
-    private String sector;
-    private Integer anio;
 
+    @Column(nullable = false)
+    private String nombre;
+
+    @Column(nullable = false)
+    private String sector;
+
+    @Column(nullable = false)
+    private Integer anio;
 }

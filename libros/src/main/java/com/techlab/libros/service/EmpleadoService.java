@@ -1,6 +1,61 @@
 package com.techlab.libros.service;
 
 import com.techlab.libros.exception.EmpleadoNoEncontradoException;
+import com.techlab.libros.exception.NombreInvalidoException;
+import com.techlab.libros.exception.SectorInvalidoException;
+import com.techlab.libros.exception.AnioInvalidoException;
+import com.techlab.libros.model.Empleado;
+import com.techlab.libros.repository.EmpleadoRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class EmpleadoService {
+
+    private final EmpleadoRepository repository;
+
+    public EmpleadoService(EmpleadoRepository repository) {
+        this.repository = repository;
+    }
+
+    public List<Empleado> listarTodos() {
+        return repository.findAll();
+    }
+
+    public Empleado obtenerPorId(int id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new EmpleadoNoEncontradoException("No se encontró un Empleado con id " + id));
+    }
+
+    public Empleado guardar(Empleado empleado) {
+        // Validaciones
+        if (empleado.getNombre() == null || empleado.getNombre().isBlank()) {
+            throw new NombreInvalidoException("El Nombre no puede estar vacío.");
+        }
+        if (empleado.getSector() == null || empleado.getSector().isBlank()) {
+            throw new SectorInvalidoException("El nombre del Sector no puede estar vacío.");
+        }
+        if (empleado.getAnio() == null || empleado.getAnio() <= 0) {
+            throw new AnioInvalidoException("El Año debe ser mayor a 0.");
+        }
+        return repository.save(empleado);
+    }
+
+    public void eliminar(int id) {
+        if (!repository.existsById(id)) {
+            throw new EmpleadoNoEncontradoException("No se encontró un Empleado con id " + id);
+        }
+        repository.deleteById(id);
+    }
+}
+
+
+
+
+/* package com.techlab.libros.service;
+
+import com.techlab.libros.exception.EmpleadoNoEncontradoException;
 import com.techlab.libros.exception.AnioInvalidoException;
 import com.techlab.libros.exception.NombreInvalidoException;
 import com.techlab.libros.model.Empleado;
@@ -56,4 +111,4 @@ public class EmpleadoService {
         Empleado empleado = obtenerPorId(id);
         empleados.remove(empleado);
     }
-}
+}*/
